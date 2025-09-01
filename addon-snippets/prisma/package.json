@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "prisma": "^5.7.1",
+    "@prisma/client": "^5.7.1"
+  },
+  "scripts": {
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "db:seed": "tsx prisma/seed.ts"
+  }
+}
