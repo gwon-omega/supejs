@@ -5,12 +5,6 @@
   "type": "module",
   "main": "src/super-app.js",
   "bin": {
-    "super-app": "bin/super-app.js",
-    "sp": "bin/super-app.js"
-  },
-  "scripts": {
-    "test": "node --test",
-    "start": "node bin/super-app.js init my-app --preset saas"
   },
   "engines": {
     "node": ">=18"
