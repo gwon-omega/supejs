@@ -27,14 +27,24 @@
 - Add security baseline features (policy report, validation gates, safer defaults)
 - Add proper open-source governance files (license, contributing, conduct, security policy)
 - Expand preset categories with research metadata and query filters
+- Add cross-platform script generation (`bash`/`powershell`/`cmd`) and environment doctor checks
+- Harden project-name validation for Windows reserved paths and safer execution behavior
+- Reduce environment diagnostics latency with low-overhead command discovery and cache refresh support
+- Add execution allowlist/timeout guardrails and Deno Fresh run-ready command generation
 
-## Phase 6 (next)
-- Load external presets from community plugin files
-- Add template signing/trust model for external starter packs
-- Add generated project boot files and optional docs-site output
-- Add ranking/scoring for presets based on maintenance signals and adoption telemetry (opt-in)
+## Phase 6 (done)
+- Load external presets from community plugin files (implemented via `preset --from <file>`)
+- Add template signing/trust model for external starter packs (basic SHA-256 verification implemented via `--from-sha256`)
+- Add generated project boot files and optional docs-site output (implemented via `bootFiles` + `--with-docs-site`)
+- Add ranking/scoring for presets (initial heuristic implemented via `preset --list --rank`; opt-in telemetry weighting implemented via `--telemetry-score`)
 
-## Phase 7 (future)
+## Phase 7 (next)
 - Web UI for goal management + starter generation
-- Multi-user support and remote sync
-- Notifications/reminders
+- Multi-user support and remote sync (local profile workspace + remote sync planning implemented via `profile` and `sync`)
+- Notifications/reminders (starter automation guidance implemented via `reminder` command)
+
+
+## Phase 8 (future)
+- Advanced preset provenance (signature chains, transparency logs)
+- Policy-as-code for scaffold governance and organization guardrails (phase started: `policy-check` command + JSON policy file evaluation)
+- Optional cloud-assisted recommendations with strict privacy controls
