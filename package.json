@@ -1,10 +1,35 @@
 {
-  "name": "supe-js",
+  "name": "@supe.js/super-app",
   "version": "1.0.0",
-  "description": "Supe Js (formerly Super App): goals/tasks engine + starter scaffold planner",
+  "description": "supe.js CLI toolkit for scaffold planning, validations, and starter catalogs",
+  "keywords": [
+    "supe.js",
+    "super-app",
+    "scaffold",
+    "starter",
+    "framework-catalog",
+    "cli"
+  ],
+  "homepage": "https://www.npmjs.com/package/@supe.js/super-app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supe-js/super-app.git"
+  },
+  "bugs": {
+    "url": "https://github.com/supe-js/super-app/issues"
+  },
   "type": "module",
-  "main": "src/super-app.js",
+  "main": "src/supe.js",
   "bin": {
+    "supe": "bin/supe.js",
+    "supe-js": "bin/supe.js",
+    "super-app": "bin/super-app.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "engines": {
     "node": ">=18"

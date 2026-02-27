@@ -3,13 +3,20 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import crypto from "node:crypto";
 
 import {
+  ANIMATION_LIBS,
+  FRAMEWORKS,
+  MOUSE_INTERACTION_LIBS,
   PM_RUNNERS,
   SuperApp,
-} from "../src/super-app.js";
-import { main } from "../bin/super-app.js";
+  generateScaffoldPlan,
+  installHints,
+  researchCatalog,
+  securityPolicyReport,
+  UI_LIBS
+} from "../src/supe.js";
+import { main } from "../bin/supe.js";
 
 test("goal model basic flow", () => {
   const app = new SuperApp();
@@ -23,7 +30,7 @@ test("save and load", () => {
   const app = new SuperApp();
   app.addGoal("Roadmap", 1);
   app.addTask("Roadmap", "Define milestones");
-  const file = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "super-app-")), "state.json");
+  const file = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "supe-")), "state.json");
   app.save(file);
   const loaded = SuperApp.load(file);
   assert.equal(loaded.goals[0].name, "Roadmap");
@@ -38,8 +45,31 @@ test("security and validation checks", () => {
   assert.equal(report.checks.find((c) => c.id === "run_mode").status, "warn");
 });
 
+test("catalog includes broad framework/library coverage", () => {
+  assert.ok(Object.keys(FRAMEWORKS).length > 20);
+  assert.ok(FRAMEWORKS.astro);
+  assert.ok(FRAMEWORKS.cloudflare_vinext);
+  assert.ok(FRAMEWORKS.cloudflare_workers);
+
+  assert.ok(UI_LIBS.mui);
+  assert.ok(UI_LIBS.radix);
+  assert.ok(ANIMATION_LIBS.framer_motion);
+  assert.ok(ANIMATION_LIBS.gsap);
+  assert.ok(MOUSE_INTERACTION_LIBS.dnd_kit);
+  assert.ok(MOUSE_INTERACTION_LIBS.use_gesture);
+
+  const catalog = researchCatalog();
+  assert.ok(catalog.frameworks.length > 20);
+  assert.ok(catalog.animationLibraries.length >= 5);
+  assert.ok(catalog.mouseInteractionLibraries.length >= 3);
+});
+
+test("install hints and package manager map", () => {
   const hints = installHints();
   ["npm", "pnpm", "yarn", "bun", "deno"].forEach((manager) => assert.ok(hints[manager]));
   assert.deepEqual(new Set(Object.keys(PM_RUNNERS)), new Set(["npm", "pnpm", "yarn", "bun", "deno"]));
 });
+
+test("cli help exits cleanly", () => {
+  assert.equal(main(["--help"]), 0);
 });

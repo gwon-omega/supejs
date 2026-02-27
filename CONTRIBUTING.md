@@ -11,7 +11,7 @@ Thanks for contributing!
 ## Required checks
 - `python3 -m unittest discover -s tests -v`
 - `npm test --silent`
-- `node bin/super-app.js --help`
+- `node bin/supe.js --help`
 
 ## Pull requests
 - Use the PR template.
