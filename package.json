@@ -1,4 +1,5 @@
 {
+  "name": "supe.js",
   "version": "1.0.0",
   "description": "supe.js CLI toolkit for scaffold planning, validations, and starter catalogs",
   "keywords": [
@@ -9,13 +10,12 @@
     "framework-catalog",
     "cli"
   ],
-  },
   "type": "module",
   "main": "src/supe.js",
   "bin": {
     "supe": "bin/supe.js",
     "supe-js": "bin/supe.js",
-    "super-app": "bin/super-app.js"
+    "super-app": "bin/supe.js"
   },
   "scripts": {
     "test": "node --test"
@@ -25,5 +25,11 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ]
 }
