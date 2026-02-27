@@ -49,36 +49,15 @@ export function userWorkspace(userId, baseDir = path.join(os.homedir(), ".super-
   };
 }
 
-export class Task {
-  constructor(title, done = false) {
-    this.title = title;
-    this.done = done;
-  }
-}
-
-export class Goal {
-  constructor(name, priority, tasks = []) {
-    this.name = name;
-    this.priority = priority;
-    this.tasks = tasks;
-  }
-}
-
 export class SuperApp {
   constructor() { this.goals = []; }
   addGoal(name, priority) {
     if (!name || !name.trim()) throw new Error("Goal name cannot be empty");
     if (priority < 1 || priority > 5) throw new Error("Priority must be between 1 and 5");
-    const goal = new Goal(name.trim(), priority, []);
-    this.goals.push(goal);
-    return goal;
   }
   addTask(goalName, taskTitle) {
     if (!taskTitle || !taskTitle.trim()) throw new Error("Task title cannot be empty");
     const goal = this.#findGoal(goalName);
-    const task = new Task(taskTitle.trim(), false);
-    goal.tasks.push(task);
-    return task;
   }
   completeTask(goalName, taskTitle) {
     const goal = this.#findGoal(goalName);
@@ -131,27 +110,6 @@ export const UI_LIBS = {
   primevue: { install: "{pm} add primevue", ecosystems: ["node"] }
 };
 
-export const PM_RUNNERS = {
-  npm: { runner: "npx", ecosystem: "node" },
-  pnpm: { runner: "pnpm dlx", ecosystem: "node" },
-  yarn: { runner: "yarn dlx", ecosystem: "node" },
-  bun: { runner: "bunx", ecosystem: "node" },
-  deno: { runner: "deno run -A -r", ecosystem: "deno" }
-};
-
-
-const EXECUTION_TIMEOUT_MS = 15 * 60 * 1000;
-const ALLOWED_EXECUTABLES = new Set(["npx", "pnpm", "yarn", "bunx", "npm", "bun", "deno"]);
-
-function assertAllowedExecutable(executable) {
-  if (!ALLOWED_EXECUTABLES.has(executable)) throw new Error(`Blocked executable in scaffold command: ${executable}`);
-}
-
-export const INSTALL_HINTS = {
-  npm: "npm i -g super-app-cli", pnpm: "pnpm add -g super-app-cli", yarn: "yarn global add super-app-cli", bun: "bun add -g super-app-cli",
-  deno: "deno install -A -n super-app jsr:@super/app-cli", brew: "brew install super-app", scoop: "scoop install super-app", choco: "choco install super-app"
-};
-
 const THEME_PRESETS = {
   neon_noir: { palette: ["#0B1021", "#7C3AED", "#06B6D4", "#F472B6"], vibe: "High-contrast cyberpunk with focused call-to-action accents" },
   calm_pro: { palette: ["#0F172A", "#334155", "#22C55E", "#F8FAFC"], vibe: "Low-cognitive-load productivity theme with soft hierarchy" },
@@ -164,14 +122,7 @@ const CI_TEMPLATES = {
 };
 
 export const STARTER_PRESETS = {
-  saas: { category: "product", maturity: "stable", description: "SaaS web app starter with auth-ready UI stack", framework: "next", packageManager: "npm", ui: ["tailwind", "radix"], theme: "calm_pro", ciTemplates: ["node_basic", "node_security"], researchNotes: "Common OSS SaaS baseline favors Next.js + Tailwind + component primitives for long-term maintainability." },
-  dashboard: { category: "internal-tools", maturity: "stable", description: "Internal dashboard with fast iteration", framework: "react", packageManager: "pnpm", ui: ["tailwind", "mantine"], theme: "neon_noir", ciTemplates: ["node_basic"], researchNotes: "React + Mantine has strong DX for operations/admin surfaces with quick UI assembly." },
-  commerce: { category: "product", maturity: "stable", description: "Commerce storefront baseline", framework: "nuxt", packageManager: "npm", ui: ["tailwind", "daisyui"], theme: "sunrise_flow", ciTemplates: ["node_basic", "node_security"], researchNotes: "Nuxt storefront workflows commonly optimize SEO + edge rendering + rapid theme customization." },
-  docs_portal: { category: "content", maturity: "stable", description: "Technical documentation portal", framework: "astro", packageManager: "pnpm", ui: ["tailwind"], theme: "calm_pro", ciTemplates: ["node_basic"], researchNotes: "Astro is popular for content-heavy sites with low JS payloads and fast performance." },
-  design_system: { category: "frontend-platform", maturity: "advanced", description: "Design system and component workbench starter", framework: "react", packageManager: "pnpm", ui: ["tailwind", "radix", "shadcn"], theme: "calm_pro", ciTemplates: ["node_basic", "node_security"], researchNotes: "Radix + utility CSS is widely adopted for accessible primitives and scalable token systems." },
-  ai_playground: { category: "ai", maturity: "emerging", description: "AI feature experimentation starter", framework: "next", packageManager: "npm", ui: ["tailwind", "primer"], theme: "neon_noir", ciTemplates: ["node_basic", "node_security"], researchNotes: "Next.js remains a dominant choice for shipping AI-integrated web experiences quickly." },
-  realtime_hub: { category: "realtime", maturity: "emerging", description: "Realtime collaboration/event stream frontend", framework: "svelte", packageManager: "pnpm", ui: ["tailwind"], theme: "sunrise_flow", ciTemplates: ["node_basic"], researchNotes: "Svelte-based builds are often chosen for fast interaction-heavy interfaces with lean bundles." },
-  deno_api_edge: { category: "edge", maturity: "experimental", description: "Deno Fresh edge-first API + web starter", framework: "deno_fresh", packageManager: "deno", ui: ["tailwind"], theme: "calm_pro", ciTemplates: ["node_basic"], researchNotes: "Fresh is growing for edge deployments and minimal-JS SSR-first architecture." }
+
 };
 
 function normalizedPresetEntry(id, data) {
@@ -241,71 +192,6 @@ function shellSafe(value, shell = "bash") {
   if (shell === "powershell") return `'${value.replaceAll("'", "''")}'`;
   return `'${value.replaceAll("'", "'\\''")}'`;
 }
-
-function cmdSafePath(value) {
-  if (/^[a-zA-Z0-9_./:-]+$/.test(value)) return value;
-  return `"${value.replaceAll("\"", "\"\"")}"`;
-}
-
-export function renderScaffoldScript(commands, shell = "bash") {
-  const commandLines = commands.filter((line) => !line.startsWith("#"));
-  const commentLines = commands.filter((line) => line.startsWith("#"));
-  if (shell === "powershell") {
-    return ["$ErrorActionPreference = 'Stop'", ...commandLines.map((line) => line.startsWith("cd ") ? `Set-Location ${shellSafe(line.slice(3), "powershell")}` : line), ...commentLines].join("\n");
-  }
-  if (shell === "cmd") {
-    return ["@echo off", "setlocal", ...commandLines.map((line) => line.startsWith("cd ") ? `cd /d ${cmdSafePath(line.slice(3))}` : line), ...commentLines.map((line) => `REM${line.slice(1)}`)].join("\r\n");
-  }
-  return ["set -euo pipefail", ...commandLines, ...commentLines].join("\n");
-}
-
-let environmentCache = null;
-
-export function detectDeveloperEnvironment(forceRefresh = false) {
-  if (environmentCache && !forceRefresh) return structuredClone(environmentCache);
-  const detected = {
-    platform: process.platform,
-    arch: process.arch,
-    nodeVersion: process.version,
-    shell: process.env.SHELL || process.env.ComSpec || "unknown",
-    packageManagers: {}
-  };
-  for (const manager of Object.keys(PM_RUNNERS)) detected.packageManagers[manager] = isCommandAvailable(manager);
-  detected.recommendedShell = process.platform === "win32" ? "powershell" : "bash";
-  detected.host = os.hostname();
-  environmentCache = detected;
-  return structuredClone(detected);
-}
-
-export function researchCatalog() {
-  return { frameworks: Object.entries(FRAMEWORKS).map(([id, data]) => ({ id, ...data })), uiLibraries: Object.entries(UI_LIBS).map(([id, data]) => ({ id, ...data })), packageManagers: Object.entries(PM_RUNNERS).map(([id, data]) => ({ id, ...data })) };
-}
-
-export function listStarterPresets(externalPresets = []) { return [...mergePresetRegistry(externalPresets).entries()].map(([id, data]) => ({ id, ...data })); }
-
-function presetScore(preset, { telemetrySignals = false } = {}) {
-  const maturityPoints = { stable: 40, advanced: 35, emerging: 25, experimental: 15 };
-  const categoryPoints = { product: 12, "internal-tools": 10, content: 9, "frontend-platform": 8, ai: 7, realtime: 7, edge: 6 };
-  const base = maturityPoints[preset.maturity] || 10;
-  const category = categoryPoints[preset.category] || 5;
-  const ci = Math.min((preset.ciTemplates || []).length * 8, 16);
-  const ui = Math.min((preset.ui || []).length * 4, 12);
-  const telemetry = telemetrySignals ? Math.round(((preset.maintenanceScore || 0) * 0.12) + ((preset.adoptionScore || 0) * 0.08)) : 0;
-  return base + category + ci + ui + telemetry;
-}
-
-export function rankStarterPresets(presets = [], options = {}) {
-  return [...presets].map((preset) => ({ ...preset, score: presetScore(preset, options) })).sort((a, b) => b.score - a.score || a.id.localeCompare(b.id));
-}
-
-
-export function queryStarterPresets({ category, ecosystem, search, externalPresets = [], ranked = false, telemetrySignals = false } = {}) {
-  const filtered = listStarterPresets(externalPresets).filter((preset) => {
-    if (category && preset.category !== category) return false;
-    if (ecosystem && FRAMEWORKS[preset.framework].ecosystem !== ecosystem) return false;
-    if (search) {
-      const haystack = `${preset.id} ${preset.description} ${preset.researchNotes}`.toLowerCase();
-      if (!haystack.includes(search.toLowerCase())) return false;
     }
     return true;
   });
@@ -352,43 +238,6 @@ export function generateScaffoldPlan(projectName, framework, uiComponents, packa
   return steps;
 }
 
-function parseCommandArgs(command) {
-  const tokens = [];
-  let current = "";
-  let quote = "";
-  for (let i = 0; i < command.length; i += 1) {
-    const char = command[i];
-    if ((char === "\"" || char === "'") && (!quote || quote === char)) {
-      quote = quote ? "" : char;
-      continue;
-    }
-    if (!quote && /\s/.test(char)) {
-      if (current) {
-        tokens.push(current);
-        current = "";
-      }
-      continue;
-    }
-    current += char;
-  }
-  if (quote) throw new Error(`Malformed command: unmatched quote in '${command}'`);
-  if (current) tokens.push(current);
-  return tokens;
-}
-
-export function scaffoldStarterApp(projectName, framework, uiComponents, packageManager, runCommands, theme = "calm_pro", ciTemplates = [], options = {}) {
-  const commands = generateScaffoldPlan(projectName, framework, uiComponents, packageManager, theme);
-  const result = {
-    projectName, framework, uiComponents, packageManager, theme,
-    design: designGuidance(theme), security: securityPolicyReport(framework, uiComponents, packageManager, runCommands), ciTemplates: getCiTemplates(ciTemplates),
-    commands,
-    bootFiles: generateBootFiles(projectName, framework, options.includeDocsSite || false),
-    scripts: {
-      bash: renderScaffoldScript(commands, "bash"),
-      powershell: renderScaffoldScript(commands, "powershell"),
-      cmd: renderScaffoldScript(commands, "cmd")
-    },
-    executed: false
   };
   if (!runCommands) return result;
   let cwd = process.cwd();
@@ -407,20 +256,6 @@ export function scaffoldStarterApp(projectName, framework, uiComponents, package
   return result;
 }
 
-export function scaffoldFromPreset(projectName, presetName, runCommands = false, overrides = {}, externalPresets = [], options = {}) {
-  const preset = mergePresetRegistry(externalPresets).get(presetName);
-  if (!preset) throw new Error(`Unknown preset: ${presetName}`);
-  return scaffoldStarterApp(
-    projectName,
-    overrides.framework || preset.framework,
-    overrides.ui || preset.ui,
-    overrides.packageManager || preset.packageManager,
-    runCommands,
-    overrides.theme || preset.theme,
-    preset.ciTemplates,
-    options
-  );
-}
 
 
 
@@ -523,39 +358,30 @@ export function syncPlan(userId, provider = "github", remote = "origin") {
 
 
 
-function normalizedStringList(value) {
-  if (!Array.isArray(value)) return [];
-  return [...new Set(value.filter((item) => typeof item === "string").map((item) => item.trim().toLowerCase()).filter(Boolean))];
-}
-
 export function evaluatePolicy(config, policy = {}) {
   const checks = [];
-  const blockedFrameworks = new Set(normalizedStringList(policy.blockedFrameworks));
-  const blockedUi = new Set(normalizedStringList(policy.blockedUi));
-  const allowedPackageManagers = normalizedStringList(policy.allowedPackageManagers);
-
-  const framework = String(config.framework || "").trim().toLowerCase();
-  const packageManager = String(config.packageManager || "").trim().toLowerCase();
-  const uiComponents = normalizedStringList(config.uiComponents);
+  const blockedFrameworks = new Set(policy.blockedFrameworks || []);
+  const blockedUi = new Set(policy.blockedUi || []);
+  const allowedPackageManagers = policy.allowedPackageManagers || [];
 
   checks.push({
     id: "framework_policy",
-    status: blockedFrameworks.has(framework) ? "fail" : "pass",
-    detail: blockedFrameworks.has(framework) ? `Framework '${framework}' is blocked by policy.` : "Framework allowed by policy."
+    status: blockedFrameworks.has(config.framework) ? "fail" : "pass",
+    detail: blockedFrameworks.has(config.framework) ? `Framework '${config.framework}' is blocked by policy.` : "Framework allowed by policy."
   });
 
-  const blockedUiFound = uiComponents.filter((ui) => blockedUi.has(ui));
+  const blockedUiFound = (config.uiComponents || []).filter((ui) => blockedUi.has(ui));
   checks.push({
     id: "ui_policy",
     status: blockedUiFound.length ? "fail" : "pass",
     detail: blockedUiFound.length ? `Blocked UI libraries: ${blockedUiFound.join(", ")}` : "UI libraries allowed by policy."
   });
 
-  const pmStatus = allowedPackageManagers.length && !allowedPackageManagers.includes(packageManager) ? "fail" : "pass";
+  const pmStatus = allowedPackageManagers.length && !allowedPackageManagers.includes(config.packageManager) ? "fail" : "pass";
   checks.push({
     id: "package_manager_policy",
     status: pmStatus,
-    detail: pmStatus === "fail" ? `Package manager '${packageManager}' is not in allowed list.` : "Package manager allowed by policy."
+    detail: pmStatus === "fail" ? `Package manager '${config.packageManager}' is not in allowed list.` : "Package manager allowed by policy."
   });
 
   const status = checks.some((c) => c.status === "fail") ? "fail" : "pass";
@@ -569,13 +395,6 @@ export function loadPolicyFile(filePath) {
 }
 
 export function installHints() { return { ...INSTALL_HINTS }; }
-
-export function demo() {
-  const app = new SuperApp();
-  app.addGoal("Launch MVP", 1);
-  app.addTask("Launch MVP", "Build core features");
-  app.addTask("Launch MVP", "Write tests");
-  app.completeTask("Launch MVP", "Build core features");
   console.log("=== Super App Demo ===");
   for (const goal of app.listGoals()) {
     console.log(`Goal: ${goal.name} (priority ${goal.priority})`);
