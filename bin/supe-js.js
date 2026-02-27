@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { main } from "./super-app.js";
+import { main } from "./supe.js";
 
 try {
   process.exitCode = main(process.argv.slice(2));
