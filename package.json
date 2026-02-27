@@ -1,11 +1,12 @@
 {
-  "name": "super-app",
+  "name": "supe-js",
   "version": "1.0.0",
-  "description": "Node.js Super App: goals/tasks engine + starter scaffold planner",
+  "description": "Supe Js (formerly Super App): goals/tasks engine + starter scaffold planner",
   "type": "module",
   "main": "src/super-app.js",
   "bin": {
-    "super-app": "bin/super-app.js"
+    "super-app": "bin/super-app.js",
+    "supe-js": "bin/supe-js.js"
   },
   "scripts": {
     "test": "node --test",
