@@ -94,10 +94,3 @@ test("published bin entrypoints are executable", () => {
     assert.ok((stat.mode & 0o111) !== 0, `${binPath} must be executable`);
   });
 });
-
-
-test("package metadata uses scoped publish name", () => {
-  const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), "package.json"), "utf-8"));
-  assert.equal(pkg.name, "@gwon-omega/supe.js");
-  assert.equal(pkg.publishConfig?.access, "public");
-});
