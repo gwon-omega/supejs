@@ -13,9 +13,9 @@ For local development, link the package globally so `supe` becomes available sys
 ```bash
 npm link
 # or, from the repo root on Unix/macOS
-./scripts/install.sh
+./scripts/supe.sh
 # on Windows (PowerShell)
-.\scripts\install.ps1
+.\scripts\supe.ps1
 ```
 
 One-line installer (curl/wget)
