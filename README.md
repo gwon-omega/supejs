@@ -18,7 +18,6 @@ npm link
 .\scripts\supe.ps1
 ```
 
-
 Install from source repo (HTTPS/SSH/GitHub CLI):
 
 ```bash
@@ -78,7 +77,6 @@ Notes:
 - Never pipe blindly from the internet in production — download, verify the checksum or signature, inspect the script, then run it.
 - The repo provides `scripts/supe-install` (no extension), `scripts/supe-install.sh`, `scripts/supe-install.sh.sha256`, `scripts/supe-install.ps1`, and `scripts/supe-install.ps1.sha256` for convenience; prefer installing from the npm registry for trusted installs.
 
-
 ### GitHub token scope troubleshooting
 
 If you are using a **fine-grained GitHub personal access token** and links to private repository content fail, `Metadata: Read-only` is not enough by itself. Add at least:
@@ -87,8 +85,6 @@ If you are using a **fine-grained GitHub personal access token** and links to pr
 - **Repository permissions → Metadata: Read-only**
 
 Without `Contents` permission, GitHub raw/content URLs and API endpoints for file contents can return permission or not-found style errors even when metadata endpoints work.
-
-
 
 ### URL verification checks (Linux/macOS/Windows/Homebrew)
 
