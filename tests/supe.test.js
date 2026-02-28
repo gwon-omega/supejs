@@ -96,39 +96,24 @@ test("published bin entrypoints are executable", () => {
   });
 });
 
-
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
 test("package metadata exposes create-super-app bin", () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), "package.json"), "utf8"));
   assert.equal(pkg.bin["create-super-app"], "bin/index.js");
-=======
-=======
->>>>>>> theirs
-=======
->>>>>>> theirs
-=======
->>>>>>> theirs
+});
+
 test("package metadata exposes supe init alias", () => {
   const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), "package.json"), "utf8"));
   assert.equal(pkg.bin["create-supe-app"], "bin/index.js");
 });
 
-
 test("cli help includes init and shell commands", () => {
   const output = execFileSync(process.execPath, ["bin/supe.js", "--help"], { encoding: "utf8" });
   assert.match(output, /supe init \[project-name\]/);
   assert.match(output, /supe shell/);
-<<<<<<< ours
-<<<<<<< ours
-<<<<<<< ours
->>>>>>> theirs
-=======
->>>>>>> theirs
-=======
->>>>>>> theirs
-=======
->>>>>>> theirs
+});
+
+test("running supe without arguments shows the help menu", () => {
+  const output = execFileSync(process.execPath, ["bin/supe.js"], { encoding: "utf8" });
+  assert.match(output, /Usage:\n  supe <command> \[options\]/);
+  assert.match(output, /Start fast:/);
 });
