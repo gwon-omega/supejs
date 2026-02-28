@@ -23,16 +23,29 @@ One-line installer (curl/wget)
 If you publish `supe` to npm or host the installer script on a reachable URL (for example a GitHub raw URL), users can install system-wide with a one-liner:
 
 ```bash
-# install published package via npm (recommended)
-curl -fsSL https://raw.githubusercontent.com/<owner>/supe/main/scripts/supe-install.sh | sh
+# Primary (recommended): install from npm
+npm install -g @supejs/supe
+
+# Quick (less safe) — pipes script directly (not recommended for production)
+curl -fsSL https://raw.githubusercontent.com/supejs/supe/main/scripts/supe-install.sh | sh
 # or using wget
-wget -qO- https://raw.githubusercontent.com/<owner>/supe/main/scripts/supe-install.sh | sh
+wget -qO- https://raw.githubusercontent.com/supejs/supe/main/scripts/supe-install.sh | sh
+
+# Safer: download, verify checksum, inspect, then run
+curl -fsSL -o supe-install.sh https://raw.githubusercontent.com/supejs/supe/main/scripts/supe-install.sh
+curl -fsSL -o supe-install.sh.sha256 https://raw.githubusercontent.com/supejs/supe/main/scripts/supe-install.sh.sha256
+# verify (Linux)
+sha256sum -c supe-install.sh.sha256
+# verify (macOS)
+shasum -a 256 -c supe-install.sh.sha256 || true
+sh supe-install.sh
 ```
 
 Notes:
 
-- The bootstrap script prefers `npm install -g supe` (published package). If the package isn't published, it falls back to `npm install -g .` when executed from a repository clone.
-- For security, audit the script before piping it to `sh` and prefer installing from the npm registry when possible.
+- The installer prefers `npm install -g @supejs/supe` (published package). If the package isn't published, the installer falls back to `npm install -g .` when executed from a repository clone.
+- Never pipe blindly from the internet in production — download, verify the checksum or signature, inspect the script, then run it.
+- The repo provides `scripts/supe-install` (no extension) and `scripts/supe-install.sh` for convenience; prefer installing from the npm registry for trusted installs.
 
 ## CLI
 
