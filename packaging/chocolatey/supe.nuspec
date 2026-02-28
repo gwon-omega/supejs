@@ -6,7 +6,7 @@
     <title>Supe CLI</title>
     <authors>supejs</authors>
     <owners>supejs</owners>
-    <projectUrl>https://github.com/supejs/supe</projectUrl>
+    <projectUrl>https://github.com/gwon-omega/supe.js</projectUrl>
     <licenseUrl>https://opensource.org/licenses/MIT</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Supe CLI — scaffold planning and starter catalog</description>
