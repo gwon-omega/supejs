@@ -86,3 +86,18 @@ test("preset catalog includes expanded templates", () => {
 test("cli help exits cleanly", () => {
   assert.equal(main(["--help"]), 0);
 });
+
+
+test("published bin entrypoints are executable", () => {
+  ["bin/supe.js", "bin/index.js"].forEach((binPath) => {
+    const stat = fs.statSync(path.join(process.cwd(), binPath));
+    assert.ok((stat.mode & 0o111) !== 0, `${binPath} must be executable`);
+  });
+});
+
+
+test("package metadata uses scoped publish name", () => {
+  const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), "package.json"), "utf-8"));
+  assert.equal(pkg.name, "@gwon-omega/supe.js");
+  assert.equal(pkg.publishConfig?.access, "public");
+});
