@@ -8,13 +8,22 @@ Supe.js is a CLI toolkit for scaffold planning, policy checks, design guidance, 
 npm install
 ```
 
+For local development, link the package globally so `supe` becomes available system-wide:
+
+```bash
+npm link
+# or, from the repo root on Unix/macOS
+./scripts/install.sh
+# on Windows (PowerShell)
+.\scripts\install.ps1
+```
+
 ## CLI
 
 ```bash
 node bin/supe.js
 ```
 
-Running `supe` without arguments now opens a command menu so developers can quickly discover the next action.
 
 ### Core commands
 
@@ -32,6 +41,7 @@ supe starter <project-name> [--framework <name>] [--package-manager <pm>] [--ui 
 supe init [project-name] [--framework <id>] [--ui <id>] [--template <id>] [--addons <csv>] [--pm <id>] [--yes] [--no-install]
 supe shell
 ```
+
 
 ### Recommended flow (dev friendly)
 
@@ -63,7 +73,7 @@ node bin/supe.js preset my-app --name next-admin-dashboard --json
 
 ## Publishing
 
-This package is published as **`@supejs/supe`**.
+This package is published as **supe**.
 
 ```bash
 npm publish --access=public
@@ -75,7 +85,7 @@ Scaffold a new app from the published package with:
 npx create-super-app my-app
 ```
 
-Scaffold a new app after installation with:
+
 
 ```bash
 supe init my-app
@@ -90,12 +100,12 @@ npm login
 
 ## Repository ownership
 
-This repository is owned by **@gwon-omega** with **@supejs/developers** as the required code owners team for reviews.
+This repository is maintained by the Supe.js maintainers: **@supejs/developers**.
 
 ## Development checks
 
 ```bash
 npm test
-python3 -m unittest discover -s tests -v
+node --test tests/*.test.js
 node bin/supe.js --help
 ```
