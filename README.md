@@ -24,7 +24,6 @@ npm link
 node bin/supe.js
 ```
 
-
 ### Core commands
 
 ```text
@@ -41,7 +40,6 @@ supe starter <project-name> [--framework <name>] [--package-manager <pm>] [--ui 
 supe init [project-name] [--framework <id>] [--ui <id>] [--template <id>] [--addons <csv>] [--pm <id>] [--yes] [--no-install]
 supe shell
 ```
-
 
 ### Recommended flow (dev friendly)
 
@@ -82,10 +80,8 @@ npm publish --access=public
 Scaffold a new app from the published package with:
 
 ```bash
-npx create-super-app my-app
+npx create-supe-app my-app
 ```
-
-
 
 ```bash
 supe init my-app
