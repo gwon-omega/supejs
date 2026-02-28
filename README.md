@@ -18,6 +18,22 @@ npm link
 .\scripts\install.ps1
 ```
 
+One-line installer (curl/wget)
+
+If you publish `supe` to npm or host the installer script on a reachable URL (for example a GitHub raw URL), users can install system-wide with a one-liner:
+
+```bash
+# install published package via npm (recommended)
+curl -fsSL https://raw.githubusercontent.com/<owner>/supe/main/scripts/bootstrap-install.sh | sh
+# or using wget
+wget -qO- https://raw.githubusercontent.com/<owner>/supe/main/scripts/bootstrap-install.sh | sh
+```
+
+Notes:
+
+- The bootstrap script prefers `npm install -g supe` (published package). If the package isn't published, it falls back to `npm install -g .` when executed from a repository clone.
+- For security, audit the script before piping it to `sh` and prefer installing from the npm registry when possible.
+
 ## CLI
 
 ```bash
@@ -71,17 +87,24 @@ node bin/supe.js preset my-app --name next-admin-dashboard --json
 
 ## Publishing
 
-This package is published as **supe**.
+This package is published as **@gwon-omega/supe.js**.
+
+To publish under the scoped name and make it publicly installable:
 
 ```bash
+# ensure you're logged in to npm with the publishing account
+npm login
+# publish as public scoped package
 npm publish --access=public
 ```
 
-Scaffold a new app from the published package with:
+Users can then install system-wide via npm:
 
 ```bash
-npx create-supe-app my-app
+npm install -g @gwon-omega/supe.js
 ```
+
+Or scaffold after installation:
 
 ```bash
 supe init my-app
