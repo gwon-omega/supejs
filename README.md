@@ -61,6 +61,8 @@ npm publish --access=public
 
 <<<<<<< ours
 <<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
 Scaffold a new app from the published package with:
 
 ```bash
@@ -68,11 +70,21 @@ npx create-super-app my-app
 =======
 =======
 >>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
+>>>>>>> theirs
 Scaffold a new app after installation with:
 
 ```bash
 supe init my-app
 <<<<<<< ours
+<<<<<<< ours
+<<<<<<< ours
+>>>>>>> theirs
+=======
+>>>>>>> theirs
+=======
 >>>>>>> theirs
 =======
 >>>>>>> theirs
