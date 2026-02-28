@@ -1,5 +1,5 @@
 {
-  "name": "@gwon-omega/supe.js",
+  "name": "@supejs/supe",
   "version": "1.0.1",
   "description": "supe.js CLI toolkit for scaffold planning, validations, and starter catalogs",
   "type": "module",

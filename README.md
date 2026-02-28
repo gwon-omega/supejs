@@ -87,7 +87,7 @@ node bin/supe.js preset my-app --name next-admin-dashboard --json
 
 ## Publishing
 
-This package is published as **@gwon-omega/supe.js**.
+This package is published as **@supejs/supe**.
 
 To publish under the scoped name and make it publicly installable:
 
@@ -101,7 +101,7 @@ npm publish --access=public
 Users can then install system-wide via npm:
 
 ```bash
-npm install -g @gwon-omega/supe.js
+npm install -g @supejs/supe
 ```
 
 Or scaffold after installation:
