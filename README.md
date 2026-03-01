@@ -2,23 +2,98 @@
 
 Supe.js is a CLI toolkit for scaffold planning, policy checks, design guidance, and starter catalog exploration.
 
-## Install
+## ⚡ Get Started
+
+### Option 1: Persistent Installation (Recommended)
+
+Install once and use `supe` everywhere system-wide:
 
 ```bash
-npm install
+npm install -g @supejs/supe
 ```
 
-For local development, link the package globally so `supe` becomes available system-wide:
+Then use the tool directly from any directory:
 
 ```bash
-npm link
-# or, from the repo root on Unix/macOS
-./scripts/supe.sh
-# on Windows (PowerShell)
-.\scripts\supe.ps1
+# Create a new project
+supe init my-app --yes
+
+# Or browse starter presets first
+supe preset --list
+supe init my-app --framework next
+
+# Check your environment
+supe doctor
 ```
 
-Install from source repo (HTTPS/SSH/GitHub CLI):
+To upgrade:
+
+```bash
+npm update -g @supejs/supe
+```
+
+### Option 2: One-time Usage (no install needed)
+
+Run directly without installing — equivalent to `uvx` for Python tools:
+
+```bash
+npx @supejs/supe init my-app --yes
+```
+
+**Benefits of persistent installation:**
+
+- Tool stays installed and available in PATH
+- No need to download on every use
+- Better tool management with `npm list -g`, `npm update -g @supejs/supe`, `npm uninstall -g @supejs/supe`
+- Cleaner shell configuration
+
+---
+
+## Shell installer (curl / PowerShell)
+
+Alternative installation via the hosted shell scripts:
+
+```bash
+# Quick (Unix/macOS) — install from npm via shell script
+curl -fsSL https://raw.githubusercontent.com/gwon-omega/supe.js/main/scripts/supe-install.sh | sh
+
+# or using wget
+wget -qO- https://raw.githubusercontent.com/gwon-omega/supe.js/main/scripts/supe-install.sh | sh
+```
+
+**Safer (Unix/macOS): download, verify checksum, inspect, then run:**
+
+```bash
+curl -fsSL -o supe-install.sh https://raw.githubusercontent.com/gwon-omega/supe.js/main/scripts/supe-install.sh
+curl -fsSL -o supe-install.sh.sha256 https://raw.githubusercontent.com/gwon-omega/supe.js/main/scripts/supe-install.sh.sha256
+# verify (Linux)
+sha256sum -c supe-install.sh.sha256
+# verify (macOS)
+shasum -a 256 -c supe-install.sh.sha256 || true
+sh supe-install.sh
+```
+
+**Windows (PowerShell) — download, verify, inspect, then run:**
+
+```powershell
+# Download installer and checksum
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/gwon-omega/supe.js/main/scripts/supe-install.ps1" -OutFile supe-install.ps1
+Invoke-WebRequest -Uri "https://raw.githubusercontent.com/gwon-omega/supe.js/main/scripts/supe-install.ps1.sha256" -OutFile supe-install.ps1.sha256
+
+# Verify SHA256 of the downloaded script
+Get-FileHash -Algorithm SHA256 .\supe-install.ps1
+Get-Content .\supe-install.ps1.sha256
+
+# If you trust the file after inspection, run it:
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\supe-install.ps1
+```
+
+> **Note:** The installer prefers `npm install -g @supejs/supe` (published registry package). If not yet published, it falls back to `npm install -g .` when run from a repository clone. Never pipe blindly from the internet in production — always verify checksums first.
+
+---
+
+## Install from source
 
 ```bash
 git clone https://github.com/gwon-omega/supe.js.git
@@ -32,50 +107,15 @@ npm install
 npm install -g @supejs/supe
 ```
 
-## One-line installer (curl/wget / PowerShell)
-
-If you publish `supe` to npm or host the installer script on a reachable URL (for example a GitHub raw URL), users can install system-wide with a one-liner.
+For local development, link the package globally so `supe` becomes available system-wide:
 
 ```bash
-# Primary (recommended): install from npm
-npm install -g @supejs/supe
-
-# Quick (less safe) — pipes script directly (Unix/macOS; not recommended for production)
-curl -fsSL https://raw.githubusercontent.com/gwon-omega/supe.js/main/scripts/supe-install.sh | sh
-# or using wget
-wget -qO- https://raw.githubusercontent.com/gwon-omega/supe.js/main/scripts/supe-install.sh | sh
-
-# Safer (Unix/macOS): download, verify checksum, inspect, then run
-curl -fsSL -o supe-install.sh https://raw.githubusercontent.com/gwon-omega/supe.js/main/scripts/supe-install.sh
-curl -fsSL -o supe-install.sh.sha256 https://raw.githubusercontent.com/gwon-omega/supe.js/main/scripts/supe-install.sh.sha256
-# verify (Linux)
-sha256sum -c supe-install.sh.sha256
-# verify (macOS)
-shasum -a 256 -c supe-install.sh.sha256 || true
-sh supe-install.sh
+npm link
+# or, from the repo root on Unix/macOS
+./scripts/supe.sh
+# on Windows (PowerShell)
+.\scripts\supe.ps1
 ```
-
-Windows (PowerShell) — do not pipe blindly; download, verify, inspect, then run:
-
-```powershell
-# Download installer and checksum
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/gwon-omega/supe.js/main/scripts/supe-install.ps1" -OutFile supe-install.ps1
-Invoke-WebRequest -Uri "https://raw.githubusercontent.com/gwon-omega/supe.js/main/scripts/supe-install.ps1.sha256" -OutFile supe-install.ps1.sha256
-
-# Verify SHA256 of the downloaded script
-Get-FileHash -Algorithm SHA256 .\supe-install.ps1
-Get-Content .\supe-install.ps1.sha256
-
-# If you trust the file after inspection, run it in a temporary bypassed execution policy:
-Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-.\supe-install.ps1
-```
-
-Notes:
-
-- The installer prefers `npm install -g @supejs/supe` (published package). If the package isn't published, the installer falls back to `npm install -g .` when executed from a repository clone.
-- Never pipe blindly from the internet in production — download, verify the checksum or signature, inspect the script, then run it.
-- The repo provides `scripts/supe-install` (no extension), `scripts/supe-install.sh`, `scripts/supe-install.sh.sha256`, `scripts/supe-install.ps1`, and `scripts/supe-install.ps1.sha256` for convenience; prefer installing from the npm registry for trusted installs.
 
 ### create-super-app command notes
 

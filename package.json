@@ -15,7 +15,7 @@
     "test": "node --test tests/*.test.js",
     "link": "npm link",
     "install:local": "npm run link",
-    "postinstall": "sh -c 'chmod +x bin/* || true'"
+    "postinstall": "node scripts/postinstall.mjs"
   },
   "keywords": [
     "supe.js",
@@ -26,6 +26,14 @@
     "cli"
   ],
   "license": "MIT",
+  "homepage": "https://github.com/gwon-omega/supe.js#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gwon-omega/supe.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gwon-omega/supe.js/issues"
+  },
   "engines": {
     "node": ">=18"
   },
@@ -46,6 +54,7 @@
     "src/",
     "templates/",
     "addon-snippets/",
+    "scripts/postinstall.mjs",
     "README.md",
     "LICENSE",
     "!addon-snippets/**/node_modules/**",
